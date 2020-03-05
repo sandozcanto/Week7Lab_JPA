@@ -5,10 +5,104 @@
  */
 package database;
 
+import java.util.List;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
+import models.Note;
+
 /**
  *
  * @author 779137
  */
 public class NoteDB {
-    
+
+    public int insert(Note note) throws Exception {
+
+        EntityManager em
+                = DBUtil.getEmFactory().createEntityManager();
+        EntityTransaction et = em.getTransaction();
+        try {
+
+            et.begin();            
+            em.persist(note);
+            et.commit();
+            return 1;
+        } catch (Exception e) {
+            et.rollback();
+            throw e;
+        } finally {
+            em.close();
+        }
+
+    }
+
+    public int update(Note note) throws Exception {
+
+        EntityManager em
+                = DBUtil.getEmFactory().createEntityManager();
+        EntityTransaction et = em.getTransaction();
+        try {
+            et.begin();
+            em.merge(note);
+            et.commit();
+            return 1;
+        } catch (Exception e) {
+            et.rollback();
+            throw e;
+        } finally {
+            em.close();
+        }
+    }
+
+    public List<Note> getAll() throws Exception {
+        EntityManager em
+                = DBUtil.getEmFactory().createEntityManager();
+        try {
+
+            List<Note> note = em.createNamedQuery("User.findAll", Note.class).getResultList();
+            return note;
+        } finally {
+            em.close();
+        }
+
+    }
+
+    /**
+     * Get a single user by their username.
+     *
+     * @param username The unique username.
+     * @return A User object if found, null otherwise.
+     * @throws NotesDBException
+     */
+    public Note getUser(String username) throws Exception {
+
+        EntityManager em
+                = DBUtil.getEmFactory().createEntityManager();
+        try {
+            Note note = em.find(Note.class, username);
+            return note;
+        } finally {
+            em.close();
+        }
+
+    }
+
+    public int delete(Note note) throws Exception {
+
+        EntityManager em
+                = DBUtil.getEmFactory().createEntityManager();
+        EntityTransaction et = em.getTransaction();
+        try {
+            et.begin();
+            em.remove(em.merge(note));
+            et.commit();
+            return 1;
+        } catch (Exception e) {
+            et.rollback();
+            throw e;
+        } finally {
+            em.close();
+        }
+    }
+
 }
