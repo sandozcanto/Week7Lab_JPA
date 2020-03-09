@@ -59,7 +59,7 @@ public class NoteDB {
                 = DBUtil.getEmFactory().createEntityManager();
         try {
 
-            List<Note> note = em.createNamedQuery("User.findAll", Note.class).getResultList();
+            List<Note> note = em.createNamedQuery("Note.findAll", Note.class).getResultList();
             return note;
         } finally {
             em.close();
@@ -70,16 +70,18 @@ public class NoteDB {
     /**
      * Get a single user by their username.
      *
-     * @param username The unique username.
+     * @param noteId
+     *
      * @return A User object if found, null otherwise.
+     * @throws java.lang.Exception
      * @throws NotesDBException
      */
-    public Note getUser(String username) throws Exception {
+    public Note get(int noteId) throws Exception {
 
         EntityManager em
                 = DBUtil.getEmFactory().createEntityManager();
         try {
-            Note note = em.find(Note.class, username);
+            Note note = em.find(Note.class, noteId);
             return note;
         } finally {
             em.close();

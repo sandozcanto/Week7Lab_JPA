@@ -12,6 +12,21 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <h1>Hello World!</h1>
+        <h1>Notes!</h1>
+        <table>
+            <tr>
+                <td>Date Created</td>
+                <td>Title</td>
+            </tr>
+            <c:forEach var="note" items="${noteList}" varStatus="status">
+                <form method="POST">
+                    <tr>
+                        <td>${note.datecreated}</td>
+                        <td>${note.title}</td>
+                        <td><input type="submit" value="Edit"/></td>
+                    </tr>
+                </form>    
+            </c:forEach>
+        </table><br>
     </body>
 </html>
