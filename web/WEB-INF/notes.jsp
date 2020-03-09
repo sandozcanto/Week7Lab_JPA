@@ -3,7 +3,7 @@
     Created on : Mar 4, 2020, 4:05:48 PM
     Author     : 779137
 --%>
-
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -21,12 +21,19 @@
             <c:forEach var="note" items="${noteList}" varStatus="status">
                 <form method="POST">
                     <tr>
-                        <td>${note.datecreated}</td>
-                        <td>${note.title}</td>
-                        <td><input type="submit" value="Edit"/></td>
+                    <input type="hidden" name="action" value="Edit"/>
+                    <input type="hidden" name="NoteId" value="note.noteid"/>
+                    <td>${note.datecreated}</td>
+                    <td>${note.title}</td>
+                    <td><input type="submit" value="Edit"/></td>
                     </tr>
                 </form>    
             </c:forEach>
         </table><br>
+        <h1>${view} Note</h1>
+        <input type="hidden" name="action" value="${type}"/>
+        <input type="text" placeholder="Title" value="${title}" name="Title"/><br>
+        <textarea rows="6" cols="35"  name="TextArea">${textArea}</textarea>
+        <input type="submit" value="${type}"/>
     </body>
 </html>

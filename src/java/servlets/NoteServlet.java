@@ -49,14 +49,57 @@ public class NoteServlet extends HttpServlet {
         } catch (Exception ex) {
             Logger.getLogger(NoteService.class.getName()).log(Level.SEVERE, null, ex);
         }
-
+        session.setAttribute("view", "Add");
+        session.setAttribute("type", "Add");
         getServletContext().getRequestDispatcher("/WEB-INF/notes.jsp").forward(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        
+
+        HttpSession session = request.getSession();
+        NoteService ns = new NoteService();
+
+        String action = request.getParameter("action");
+        String noteId = request.getParameter("NoteId");
+        String title = request.getParameter("title");
+        String textArea = request.getParameter("textArea");
+
+        List<Note> idList = null;
+        try {
+            idList = (List<Note>) ns.get(Integer.parseInt(noteId));
+        } catch (Exception ex) {
+            Logger.getLogger(NoteServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        try {
+            if (action.equals("Add")) {
+//                ns.update(4,new Date(), title, textArea);
+            } else if (action.equals("Edit")) {
+                session.setAttribute("type", "Save");
+                session.setAttribute("title", "Save");
+                session.setAttribute("textArea", "Save");
+
+            } else if (action.equals("Save")) {
+                session.setAttribute("type", "Add");
+//                ns.insert(4,new Date(), title, textArea);
+            }
+        } catch (Exception ex) {
+            request.setAttribute("errorMessage", "Whoops.  Could not perform that action.");
+        }
+
+        List<Note> noteList = null;
+        try {
+            noteList = ns.getAll();
+            session.setAttribute("noteList", noteList);
+        } catch (Exception ex) {
+            Logger.getLogger(NoteService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        getServletContext().getRequestDispatcher("/WEB-INF/notes.jsp").forward(request, response);
+
     }
+
     /**
      * Returns a short description of the servlet.
      *
