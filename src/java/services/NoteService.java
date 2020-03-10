@@ -22,7 +22,7 @@ public class NoteService {
         noteDB = new NoteDB();
     }
 
-    public Note get(Integer noteid) throws Exception {
+    public Note get(int noteid) throws Exception {
         return noteDB.get(noteid);
     }
 

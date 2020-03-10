@@ -22,7 +22,7 @@
                 <form method="POST">
                     <tr>
                     <input type="hidden" name="action" value="Edit"/>
-                    <input type="hidden" name="NoteId" value="note.noteid"/>
+                    <input type="hidden" name="NoteId" value="${note.noteid}"/>
                     <td>${note.datecreated}</td>
                     <td>${note.title}</td>
                     <td><input type="submit" value="Edit"/></td>
@@ -30,10 +30,13 @@
                 </form>    
             </c:forEach>
         </table><br>
-        <h1>${view} Note</h1>
-        <input type="hidden" name="action" value="${type}"/>
-        <input type="text" placeholder="Title" value="${title}" name="Title"/><br>
-        <textarea rows="6" cols="35"  name="TextArea">${textArea}</textarea>
-        <input type="submit" value="${type}"/>
+        <form method="POST">
+<!--        <h1><c:out value="${view}" default="Add" />Note</h1>-->
+            <h1>${view} Note</h1>
+            <input type="hidden" name="action" value="${type}"/>
+            <input type="text" placeholder="Title" value="${title}" name="Title"/><br>
+            <textarea rows="6" cols="35"  name="TextArea">${textArea}</textarea>
+            <input type="submit" value="${type}"/>
+        </form>
     </body>
 </html>

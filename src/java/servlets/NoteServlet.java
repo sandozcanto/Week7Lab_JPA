@@ -61,28 +61,32 @@ public class NoteServlet extends HttpServlet {
         NoteService ns = new NoteService();
 
         String action = request.getParameter("action");
-        String noteId = request.getParameter("NoteId");
-        String title = request.getParameter("title");
-        String textArea = request.getParameter("textArea");
-
-        List<Note> idList = null;
-        try {
-            idList = (List<Note>) ns.get(Integer.parseInt(noteId));
-        } catch (Exception ex) {
-            Logger.getLogger(NoteServlet.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        String title = request.getParameter("Title");
+        String textArea = request.getParameter("TextArea");
 
         try {
             if (action.equals("Add")) {
-//                ns.update(4,new Date(), title, textArea);
+                ns.insert(getnewId(ns.getAll()), new Date(), title, textArea);
+                
+                
             } else if (action.equals("Edit")) {
+
+                int noteId = Integer.parseInt(request.getParameter("NoteId"));
+
+                Note idList = null;
+                try {
+                    idList = ns.get(noteId);
+                } catch (Exception ex) {
+                    Logger.getLogger(NoteServlet.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
                 session.setAttribute("type", "Save");
-                session.setAttribute("title", "Save");
-                session.setAttribute("textArea", "Save");
+                session.setAttribute("title", idList.getTitle());
+                session.setAttribute("textArea", idList.getContents());
 
             } else if (action.equals("Save")) {
                 session.setAttribute("type", "Add");
-//                ns.insert(4,new Date(), title, textArea);
+                ns.update(4, new Date(), title, textArea);
             }
         } catch (Exception ex) {
             request.setAttribute("errorMessage", "Whoops.  Could not perform that action.");
@@ -95,7 +99,6 @@ public class NoteServlet extends HttpServlet {
         } catch (Exception ex) {
             Logger.getLogger(NoteService.class.getName()).log(Level.SEVERE, null, ex);
         }
-
         getServletContext().getRequestDispatcher("/WEB-INF/notes.jsp").forward(request, response);
 
     }
@@ -109,5 +112,12 @@ public class NoteServlet extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+
+    private int getnewId(List<Note> noteList) {
+
+        int id = noteList.size()+1;
+        System.out.println("my id "+id);
+        return id;
+    }
 
 }
